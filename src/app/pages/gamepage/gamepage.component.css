@@ -1,0 +1,68 @@
+.outer-box {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 90vh;
+}
+
+.image-class {
+  position: absolute;
+  top: 50vh;
+  pointer-events: all;
+  image-rendering: pixelated;
+  width: 128px;
+  height: 128px;
+}
+
+.image-class:hover {
+  animation: expand 0.7s ease-in-out 0.2s;
+}
+
+.image-class:active {
+  animation: poink 0.05s ease-in-out forwards;
+}
+
+.foodItems {
+  width: auto;
+  height: 6vh;
+}
+
+.point {
+  position: absolute;
+  animation: fade 1s ease-in-out forwards;
+  font-family: sans-serif;
+}
+
+@keyframes expand {
+  0% {
+    width: 128px;
+  }
+  50% {
+    width: 150px;
+  }
+  100% {
+    width: 128px;
+  }
+}
+
+@keyframes poink {
+  0% {
+    width: 128px;
+    height: auto;
+  }
+  100% {
+    width: 140px;
+    height: auto;
+  }
+}
+
+@keyframes fade {
+  0% {
+    transform: top -0vh;
+    opacity: 1;
+  }
+  100% {
+    transform: top -4vh;
+    opacity: 0;
+  }
+}
