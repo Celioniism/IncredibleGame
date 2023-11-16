@@ -1,20 +1,35 @@
-<div cdkDropListGroup>
-  <div
-    cdkDropList
-    [cdkDropListData]="foodInventory"
-    (cdkDropListDropped)="drop($event)"
-    style="width: fit-content"
-    class="row"
-  >
-    <div
-      class="col"
-      *ngFor="let food of foodInventory; let i = index"
-      style="width: fit-content"
-    >
-      <img cdkDrag class="foodItems" src="{{ getPath(food) }}" />
+<div cdkDropListGroup style="justify-content: center">
+  <div class="row" style="width: 95vw; margin: auto">
+    <div class="col">
+      <div
+        cdkDropList
+        [cdkDropListData]="foodInventory"
+        (cdkDropListDropped)="drop($event)"
+        style="width: fit-content; max-width: 50vw; overflow: auto"
+        class="row flex-nowrap"
+      >
+        <div
+          class="col"
+          *ngFor="let food of foodInventory; let i = index"
+          style="width: fit-content"
+        >
+          <img cdkDrag class="foodItems" src="{{ getPath(food) }}" />
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h1 class="row">{{ points }}</h1>
+      <div class="row" style="justify-content: right">
+        <div class="progress">
+          <div
+            class="progress-bar"
+            [ngStyle]="{ width: (points / pointsToLevelUp) * 100 + '%' }"
+          ></div>
+        </div>
+      </div>
     </div>
   </div>
-
   <div class="container-lg outer-box">
     <!-- subject  -->
     <div style="width: fit-content; height: fit-content">

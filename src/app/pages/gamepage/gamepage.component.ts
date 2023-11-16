@@ -20,6 +20,8 @@ export class GamepageComponent {
 
   level: number = 0;
 
+  overallModifier: number = 0;
+
   pointsToLevelUp: number = 100;
 
   points = 0;
@@ -55,14 +57,59 @@ export class GamepageComponent {
     },
   };
   sprite: HTMLElement | null | undefined;
-
+  fullnessInterval: any;
   ngOnInit() {
     this.sprite = <HTMLElement>document.getElementById('sprite');
+    this.hungerThread();
   }
 
+  async hungerThread() {
+    this.fullnessInterval = setInterval(() => {
+      this.decreaseFullness();
+    }, 2000);
+  }
+
+  decreaseFullness() {
+    switch (true) {
+      case this.fullness > 80 && this.fullness < 100: {
+        this.pointModifier = this.overallModifier + 1 * 1.75;
+        break;
+      }
+      case this.fullness > 60 && this.fullness < 80: {
+        this.pointModifier = this.overallModifier + 1 * 1.6;
+        break;
+      }
+      case this.fullness > 40 && this.fullness < 60: {
+        this.pointModifier = this.overallModifier + 1 * 1.4;
+        break;
+      }
+      case this.fullness > 0 && this.fullness < 40: {
+        this.pointModifier = this.overallModifier + 1 * 1.1;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    if (this.fullness != 0) {
+      this.fullness -= 1;
+    }
+  }
+
+  decimalmultiply(a: number, b: number): number {
+    return parseFloat((a * b).toFixed(2));
+  }
   addPoint() {
-    var toAdd = this.pointModifier * this.level + 1;
+    var toAdd: number = this.pointModifier * (this.overallModifier + 1);
+
     this.points += toAdd;
+    this.points = this.decimalmultiply(this.points, 1);
+    if (this.points > this.pointsToLevelUp) {
+      this.points = 0;
+      this.pointsToLevelUp = this.pointsToLevelUp * 4;
+      this.level += 1;
+      this.overallModifier += 0.3;
+    }
     if (this.sprite != null) {
       this.sprite.insertAdjacentHTML(
         'afterend',
@@ -71,7 +118,6 @@ export class GamepageComponent {
       var newdiv: HTMLElement = <HTMLElement>(
         document.getElementById(this.points + '')
       );
-      console.log(newdiv);
 
       newdiv.animate(
         [
@@ -110,6 +156,7 @@ export class GamepageComponent {
       this.queueModify('Too Full To Eat!!');
       return;
     } else if (this.fullness + modifier > 100) {
+      this.pointModifier = this.overFullModifier;
       this.overFull = true;
     }
     this.fullness += modifier;
@@ -137,6 +184,7 @@ export class GamepageComponent {
         event.previousIndex,
         event.currentIndex
       );
+      this.feed(event.container.data[0]);
     }
   }
   getPath(item: string): string {

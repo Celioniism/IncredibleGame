@@ -7,11 +7,15 @@
 
 .image-class {
   position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
   top: 50vh;
   pointer-events: all;
   image-rendering: pixelated;
-  width: 128px;
-  height: 128px;
+  width: 20vh;
+  height: auto;
 }
 
 .image-class:hover {
@@ -27,6 +31,18 @@
   height: 6vh;
 }
 
+.foodItems:hover {
+  width: auto;
+  height: 6vh;
+  animation: blink 1.4s ease-in-out infinite forwards;
+}
+
+.foodItems:active {
+  width: auto;
+  height: 6vh;
+  animation: blink 1.4s ease-in-out infinite forwards;
+}
+
 .point {
   position: absolute;
   animation: fade 1s ease-in-out forwards;
@@ -35,23 +51,23 @@
 
 @keyframes expand {
   0% {
-    width: 128px;
+    width: 20vh;
   }
   50% {
-    width: 150px;
+    width: 22vh;
   }
   100% {
-    width: 128px;
+    width: 20vh;
   }
 }
 
 @keyframes poink {
   0% {
-    width: 128px;
+    width: 20vh;
     height: auto;
   }
   100% {
-    width: 140px;
+    width: 21vh;
     height: auto;
   }
 }
@@ -65,4 +81,70 @@
     transform: top -4vh;
     opacity: 0;
   }
+}
+
+@keyframes blink {
+  0% {
+    width: auto;
+    height: 6vh;
+  }
+  50% {
+    width: auto;
+    height: 6.5vh;
+    filter: brightness(1);
+  }
+  100% {
+    width: auto;
+    height: 6vh;
+  }
+}
+
+.progress {
+  width: 50%;
+  height: fit-content;
+  padding: 4px;
+  margin-right: 30px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25),
+    0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25),
+    0 1px rgba(255, 255, 255, 0.08);
+}
+
+.progress-bar {
+  height: 16px;
+  border-radius: 4px;
+  background-image: -webkit-linear-gradient(
+    top,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.05)
+  );
+  background-image: -moz-linear-gradient(
+    top,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.05)
+  );
+  background-image: -o-linear-gradient(
+    top,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.05)
+  );
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.05)
+  );
+  -webkit-transition: 0.4s linear;
+  -moz-transition: 0.4s linear;
+  -o-transition: 0.4s linear;
+  transition: 0.4s linear;
+  -webkit-transition-property: width, background-color;
+  -moz-transition-property: width, background-color;
+  -o-transition-property: width, background-color;
+  transition-property: width, background-color;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.1);
 }
