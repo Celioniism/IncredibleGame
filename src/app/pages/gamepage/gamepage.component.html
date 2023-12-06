@@ -2,12 +2,12 @@
   <div class="row" style="width: 95vw; margin: auto">
     <div class="col-5" style="min-width:270px">
       <div *ngIf="foodInventory.length>0" class="card colorTheme"
-        style="width:fit-content;padding-right:30px; margin-top:25px; min-width:70px;">
+        style="width:fit-content;padding-right:30px; margin-top:25px; min-width:70px; overflow: auto; max-width:35vw">
         <div class="card-body colorTheme" style="width:fit-content; padding-right:30px" cdkDropList
           [cdkDropListData]="foodInventory" (cdkDropListDropped)="drop($event)"
-          style="width: fit-content; max-width: 50vw; overflow: auto" class="row flex-nowrap">
-          <div class="col" *ngFor="let food of foodInventory; let i = index; padding-inline 15px"
-            style="width: fit-content; width:65px !important; height:65px">
+          style="width: fit-content; max-width: 50vw; " class="row flex-nowrap">
+          <div class="col" *ngFor="let food of foodInventory; let i = index;"
+            style="min-width: 40px; width:65px !important; height:65px;  padding-inline 15px">
             <img cdkDrag class="foodItems" src="{{ getPath(food) }}" title="{{'+'+getNutrition(food)}}"
               style="position: absolute;" />
           </div>

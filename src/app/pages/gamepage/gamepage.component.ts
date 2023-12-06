@@ -198,7 +198,7 @@ export class GamepageComponent {
 
   // user buys a new auto clicker, this sets a new clicker to run.
   addAutoClicker(price: number) {
-    if (this.points - price < 0) {
+    if (this.points - price < 0 && this.clickers.length > 9) {
       return;
     }
     this.points -= price;
@@ -210,9 +210,6 @@ export class GamepageComponent {
   // checks if max clicker reached to prevent lag and to even out gameplay, pushes a new clicker with
   // an interval that will run the "addPoint" function for the user every 2 seconds
   clicker() {
-    if (this.clickers.length > 9) {
-      return;
-    }
     this.clickers.push(
       setInterval(() => {
         this.addPoint(true);
