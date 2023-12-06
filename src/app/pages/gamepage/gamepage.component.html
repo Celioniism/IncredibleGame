@@ -1,49 +1,108 @@
-<div cdkDropListGroup style="justify-content: center">
+<div class="backgroundImage" cdkDropListGroup style="justify-content: center" style="height:95vh">
   <div class="row" style="width: 95vw; margin: auto">
-    <div class="col">
-      <div
-        cdkDropList
-        [cdkDropListData]="foodInventory"
-        (cdkDropListDropped)="drop($event)"
-        style="width: fit-content; max-width: 50vw; overflow: auto"
-        class="row flex-nowrap"
-      >
-        <div
-          class="col"
-          *ngFor="let food of foodInventory; let i = index"
-          style="width: fit-content"
-        >
-          <img cdkDrag class="foodItems" src="{{ getPath(food) }}" />
+    <div class="col-5" style="min-width:270px">
+      <div *ngIf="foodInventory.length>0" class="card colorTheme"
+        style="width:fit-content;padding-right:30px; margin-top:25px; min-width:70px;">
+        <div class="card-body colorTheme" style="width:fit-content; padding-right:30px" cdkDropList
+          [cdkDropListData]="foodInventory" (cdkDropListDropped)="drop($event)"
+          style="width: fit-content; max-width: 50vw; overflow: auto" class="row flex-nowrap">
+          <div class="col" *ngFor="let food of foodInventory; let i = index; padding-inline 15px"
+            style="width: fit-content; width:65px !important; height:65px">
+            <img cdkDrag class="foodItems" src="{{ getPath(food) }}" title="{{'+'+getNutrition(food)}}"
+              style="position: absolute;" />
+          </div>
         </div>
       </div>
     </div>
 
     <div class="col">
-      <h1 class="row">{{ points }}</h1>
-      <div class="row" style="justify-content: right">
-        <div class="progress">
-          <div
-            class="progress-bar"
-            [ngStyle]="{ width: (points / pointsToLevelUp) * 100 + '%' }"
-          ></div>
+      <div class="row" style="display: flex; padding-block: 30px">
+        <h1 class="col" style="margin: auto; width: fit-content !important; ">
+          ${{ points }}
+        </h1>
+        <!-- ==================================================================================== -->
+        <div *ngIf="shopOpen" style="
+            position: absolute;
+            top: 24vh;
+            margin-left: -2vw;
+            width: fit-content;
+          ">
+          <div class="card colorTheme" style="width: fit-content">
+            <div class="card-body colorTheme" style="width: fit-content">
+              <div class="row flex-nowrap" style="width: 100%; margin-left:0px; ">
+                <div class="col">
+                  <h3 style="width:fit-content; ">Shop</h3>
+                </div>
+                <div class="col" style="display:flex;justify-content: right;"><button class="btn btn-outline-danger"
+                    style="width:fit-content; " (click)="closeShop()">X</button></div>
+              </div>
+              <div class="row" style="padding: 25px; ppadding-bottom:0px">
+                <div class="col" style="width: 80px; height: 80px" *ngFor="let path of foodPaths; let i = index">
+                  <img class="foodItems" style="position: absolute" src="{{ path }}" (click)="buyFood(foodPrices[i], i)"
+                    title="+{{getNutritionStore(i)}} nutrition" />
+                  <h5 style="position: absolute; top: 150px; margin-left: 12px">
+                    ${{ foodPrices[i] }}
+                  </h5>
+                </div>
+
+              </div>
+
+              <div class="row flex-nowrap" style="width: 100%; margin-left:15px;margin-top:0px ">
+                <div class="col" style="width: 80px; height: 80px">
+                  <img class="foodItems" src="../../../assets/Images/icons/hand.png" alt="clicker"
+                    (click)="addAutoClicker(100)" title="add an auto clicker (max of 9)" />
+                  <h5 style=" margin-left: 12px; position: absolute">
+                    $100
+                  </h5>
+                </div>
+                <div class="col" style="width: 80px; height: 80px">
+                  <img class="foodItems" src="../../../assets/Images/icons/hand.png" alt="clicker\nupgrade"
+                    (click)="changeClickerMod(300)" title="add .5 to the clicker multipier" /><a
+                    style="font-weight:heavy; font-size:44px; position:absolute">+</a>
+                  <h5 style=" margin-left: 12px;position: absolute">
+                    $300
+                  </h5>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
+        <!-- ==================================================================================== -->
+        <a style="
+            font-size: 20px;
+            padding-right: 20px;
+            width: fit-content;
+            margin: auto;
+          ">
+          level {{ level + 1 }}
+        </a>
+        <div class="progress" style="margin: auto;min-width:170px">
+          <div class="progress-bar" [ngStyle]="{ width: (points / pointsToLevelUp) * 100 + '%' }"></div>
+        </div>
+        <a class="col-2" style="width: fit-content; justify-self: right; min-width:120px">
+          <h4 style="text-decoration:none; width: fit-content; margin:auto">Shop</h4>
+          <img src="../../../assets/Images/icons/sumi.jpg" style="height: 70px; width: 70px" (click)="openShop()" />
+        </a>
       </div>
     </div>
   </div>
-  <div class="container-lg outer-box">
+  <div class="container-lg outer-box ">
     <!-- subject  -->
-    <div style="width: fit-content; height: fit-content">
-      <img
-        cdkDropList
-        [cdkDropListData]="belly"
-        (cdkDropListDropped)="drop($event)"
-        id="image-class"
-        class="image-class"
-        src="../../../assets/Images/Sprites/Pegin.png"
-        (click)="addPoint()"
-        id="sprite"
-      />
-      <div></div>
+    <div class="row" style="width:450px">
+      <div class="col" style="width:fit-content; height:fit-content; ">
+        <img cdkDropList [cdkDropListData]="belly" (cdkDropListDropped)="drop($event)" id="image-class"
+          class="image-class" [ngStyle]="{'width':  25+(fullness/100)*15+'vh' }"
+          src="../../../assets/Images/Sprites/Pegin.png" (click)="addPoint()" id="sprite" />
+        <div>
+        </div>
+      </div>
+      <div class="progress-2" style="margin: auto; transform:translateY(9vh)">
+        <a style="position:absolute; top:-2.5vh; left: -50%">{{fullness}}/100</a>
+        <hr style="position:absolute; top:3.1vh; left:-1px; height:4px; border: 2px solid black; width:25px">
+        <div class="progress-bar-food" [ngStyle]="{ height: (fullness / 120) * 100  + '%' }"></div>
+      </div>
+
     </div>
   </div>
 </div>
