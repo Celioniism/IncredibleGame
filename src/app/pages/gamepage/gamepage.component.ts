@@ -2,9 +2,6 @@ import {
   CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
-  CdkDrag,
-  CdkDropList,
-  CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 
@@ -16,21 +13,25 @@ import { Component } from '@angular/core';
 export class GamepageComponent {
   pointModifier: number = 1;
 
+  // when overrfull multiply clicked points by this value
   overFullModifier: number = 0.6;
 
   level: number = 0;
 
+  // when you level up this increases by .3
   overallModifier: number = 0;
 
+  // sets the upper limit to current level, added to and multiplied by 4 for each level
   pointsToLevelUp: number = 100;
 
+  // money aka points are your shop currency and your means to level up. once you level up you cannot lose level.
   points = 0;
 
+  // how full the charachter is from 0/100%
   fullness: number = 0;
 
+  // overfull boolean that will trigger when fullness is over 100%
   overFull: boolean = false;
-
-  messageQueue: string[] = [];
 
   foodPaths: string[] = [
     '../../../assets/Images/foodStuffs/cookie.png',
@@ -63,6 +64,7 @@ export class GamepageComponent {
   shopOpen: boolean = false;
   clickers: any[] = [];
   clickerMod: number = 1;
+
   constructor() {
     this.points = JSON.parse(<string>localStorage.getItem('points')) ?? 0;
     this.level = JSON.parse(<string>localStorage.getItem('level')) ?? 0;
@@ -73,6 +75,7 @@ export class GamepageComponent {
     this.pointModifier =
       JSON.parse(<string>localStorage.getItem('pointModifier')) ?? 1;
   }
+
   ngOnInit() {
     // set sprite element variable to select later and add components to
     this.sprite = <HTMLElement>document.getElementById('sprite');
@@ -198,7 +201,7 @@ export class GamepageComponent {
 
   // user buys a new auto clicker, this sets a new clicker to run.
   addAutoClicker(price: number) {
-    if (this.points - price < 0 && this.clickers.length > 9) {
+    if (this.points - price < 0 || this.clickers.length > 9) {
       return;
     }
     this.points -= price;
@@ -238,7 +241,8 @@ export class GamepageComponent {
     var keys = Object.keys(json);
     return { key: keys[i].toString() };
   };
-  // buy food from the market, this pulls the position in the PNG array of the food and calls the number parser to grab the food name.
+  // buy food from the market, this pulls the position in the PNG array of the food
+  // and calls the number parser to grab the food name.
   buyFood(price: number, item: number) {
     if (this.points - price < 0) {
       return;
@@ -256,25 +260,21 @@ export class GamepageComponent {
     type ObjectKey = keyof typeof this.foodDictionary;
     const sn = snack as ObjectKey;
     var modifier = this.foodDictionary[sn].fullness;
-    if (this.fullness > 100) {
-      this.queueModify('Too Full To Eat!!');
+    if (this.fullness >= 100) {
       return;
+      //checks if the food will over fill the belly array
     } else if (this.fullness + modifier > 100) {
       this.pointModifier = this.overFullModifier;
       this.overFull = true;
     }
     this.fullness += modifier;
+    // removes first element from the nelly array
     this.belly.shift();
   }
 
-  queueModify(message: string) {
-    this.messageQueue.push(message);
-    if (this.messageQueue.length > 5) {
-      this.messageQueue.shift();
-    }
-  }
-
   drop(event: CdkDragDrop<string[], any, any>) {
+    // when an item is dropped in a different container it will run this function. cdkdragdrop does the linking for us
+    // checks if starting array is the same array that we dragged into, if so, re-order the array
     if (event.previousContainer === event.container || this.fullness > 100) {
       moveItemInArray(
         event.container.data,
@@ -288,12 +288,13 @@ export class GamepageComponent {
         event.previousIndex,
         event.currentIndex
       );
+      // feeds the character
       this.feed(event.container.data[0]);
     }
   }
 
   // HTML Functions //
-
+  // these return object names, properties, and make the process of getting information from our food object easy
   getPath(item: string): string {
     type ObjectKey = keyof typeof this.foodDictionary;
     const sn = item as ObjectKey;
@@ -301,17 +302,17 @@ export class GamepageComponent {
     return this.foodPaths[index];
   }
 
+  /// displays on hover of the food inventory how much nutrition a food items gives
   getNutrition(item: string): number {
     type ObjectKey = keyof typeof this.foodDictionary;
     const sn = item as ObjectKey;
     var fullness = this.foodDictionary[sn].fullness;
     return fullness;
   }
-
+  /// displays on hover of the store how much nutrition a food items gives
   getNutritionStore(item: number): number {
     var keys = Object.keys(this.foodDictionary);
     type ObjectKey = keyof typeof this.foodDictionary;
-
     const key = keys[item] as ObjectKey;
     var nutrition = this.foodDictionary[key].fullness;
     return nutrition;
